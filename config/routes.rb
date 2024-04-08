@@ -1,3 +1,5 @@
+require 'api_constraints'
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -7,12 +9,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
 
-  namespace :api do
-    namespace :v1 do
+  namespace :api, defaults: { format: :json } do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1) do
       resources :kittens
     end
 
-    namespace :v2 do
+    scope module: :v2, constraints: ApiConstraints.new(version: 2, default: true) do
       resources :kittens
     end
   end
